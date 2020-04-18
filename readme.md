@@ -45,4 +45,5 @@ PS > .\imgConverter.ps1 -path C:\Users\UserName\Pictures -l 800
  ```
  PS > .\imagConverter.ps1 -path C:\Users\UserName\Pictures -l 800
 C:\Users\UserName\Pictures\xxx_.jpeg:(3264,2448)->(800,600)
-C:\Users\UserName\Pictures\yyy_.jpeg:(5184,3888)->(800,600)```  
+C:\Users\UserName\Pictures\yyy_.jpeg:(5184,3888)->(800,600)
+```  
