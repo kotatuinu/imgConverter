@@ -2,7 +2,7 @@ param(
 	[parameter(mandatory)][string]$path, 
 	[parameter(mandatory)][int]$l, 
 	[int]$s,
-	[string]$mode="jpeg"
+	[string]$imgf="jpeg"
 )
 [void][Reflection.Assembly]::LoadWithPartialName("System.Drawing")
 
@@ -11,7 +11,7 @@ $imgFList=@{
 	bmp=[System.Drawing.Imaging.ImageFormat]::Bmp;
 	exif=[System.Drawing.Imaging.ImageFormat]::Exif;
 	gif=[System.Drawing.Imaging.ImageFormat]::Gif;
-	icon=[System.Drawing.Imaging.ImageFormat]::Icon;
+	ico=[System.Drawing.Imaging.ImageFormat]::Icon;
 	png=[System.Drawing.Imaging.ImageFormat]::Png;
 	tiff=[System.Drawing.Imaging.ImageFormat]::Tiff;
 	wmf=[System.Drawing.Imaging.ImageFormat]::Wmf;
@@ -21,13 +21,14 @@ if (-not (Test-Path $path)) {
 	return
 }
 if ($l -le 0) {
+	write-error "Invalid argment `"l`"."
 	return
 }
-if (!$imgFList.ContainsKey($mode)) {
-	write-error "Invalid argment `"mode`"."
+if (!$imgFList.ContainsKey($imgf)) {
+	write-error "Invalid argment `"imgf`"."
 	return
 }
-$imageFormat=$imgFList[$mode]
+$imageFormat=$imgFList[$imgf]
 
 get-childitem $path | ?{!$_.PSIsContainer} | %{
 	try {
@@ -51,7 +52,7 @@ get-childitem $path | ?{!$_.PSIsContainer} | %{
 		$canvas = New-Object System.Drawing.Bitmap($w, $h)
 		$graphics = [System.Drawing.Graphics]::FromImage($canvas)
 		$graphics.DrawImage($image, (New-Object System.Drawing.Rectangle(0, 0, $canvas.Width, $canvas.Height)))
-		$outname=("{0}\{1}_.{2}" -F $_.DirectoryName, $_.basename, $mode)
+		$outname=("{0}\{1}_.{2}" -F $_.DirectoryName, $_.basename, $imgf)
 	("{0}:({1},{2})->({3},{4}) " -F $outname, $image.Width, $image.Height, $w, $h)
 		$canvas.Save($outname, $imageFormat)
 	} catch {
